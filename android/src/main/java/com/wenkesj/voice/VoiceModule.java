@@ -2,9 +2,11 @@ package com.wenkesj.voice;
 
 import android.Manifest;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognitionListener;
@@ -55,11 +57,13 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
   }
 
   private void startListening(ReadableMap opts) {
+    AudioManager audioManager=(AudioManager)this.reactContext.getSystemService(Context.AUDIO_SERVICE);
+    audioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
     if (speech != null) {
       speech.destroy();
       speech = null;
     }
-    
+
     if(opts.hasKey("RECOGNIZER_ENGINE")) {
       switch (opts.getString("RECOGNIZER_ENGINE")) {
         case "GOOGLE": {
@@ -300,6 +304,14 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
     sendEvent("onSpeechEnd", event);
     Log.d("ASR", "onEndOfSpeech()");
     isRecognizing = false;
+
+    new Handler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        AudioManager audioManager=(AudioManager)VoiceModule.this.reactContext.getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
+      }
+    }, 500 );
   }
 
   @Override
@@ -311,6 +323,14 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
     event.putMap("error", error);
     sendEvent("onSpeechError", event);
     Log.d("ASR", "onError() - " + errorMessage);
+
+    new Handler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        AudioManager audioManager=(AudioManager)VoiceModule.this.reactContext.getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
+      }
+    }, 500 );
   }
 
   @Override
