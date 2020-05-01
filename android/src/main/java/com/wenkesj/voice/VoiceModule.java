@@ -211,6 +211,14 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
         } catch(Exception e) {
           callback.invoke(e.getMessage());
         }
+
+        new Handler().postDelayed(new Runnable() {
+          @Override
+          public void run() {
+            AudioManager audioManager=(AudioManager)VoiceModule.this.reactContext.getSystemService(Context.AUDIO_SERVICE);
+            audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
+          }
+        }, 800 );
       }
     });
   }
@@ -231,6 +239,14 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
         } catch(Exception e) {
           callback.invoke(e.getMessage());
         }
+
+        new Handler().postDelayed(new Runnable() {
+          @Override
+          public void run() {
+            AudioManager audioManager=(AudioManager)VoiceModule.this.reactContext.getSystemService(Context.AUDIO_SERVICE);
+            audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
+          }
+        }, 800 );
       }
     });
   }
@@ -311,7 +327,7 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
         AudioManager audioManager=(AudioManager)VoiceModule.this.reactContext.getSystemService(Context.AUDIO_SERVICE);
         audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
       }
-    }, 500 );
+    }, 800 );
   }
 
   @Override
@@ -330,7 +346,7 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
         AudioManager audioManager=(AudioManager)VoiceModule.this.reactContext.getSystemService(Context.AUDIO_SERVICE);
         audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
       }
-    }, 500 );
+    }, 800 );
   }
 
   @Override
