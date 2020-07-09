@@ -58,7 +58,6 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
 
   private void startListening(ReadableMap opts) {
     AudioManager audioManager=(AudioManager)this.reactContext.getSystemService(Context.AUDIO_SERVICE);
-    audioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
     if (speech != null) {
       speech.destroy();
       speech = null;
@@ -211,14 +210,6 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
         } catch(Exception e) {
           callback.invoke(e.getMessage());
         }
-
-        new Handler().postDelayed(new Runnable() {
-          @Override
-          public void run() {
-            AudioManager audioManager=(AudioManager)VoiceModule.this.reactContext.getSystemService(Context.AUDIO_SERVICE);
-            audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
-          }
-        }, 800 );
       }
     });
   }
@@ -239,14 +230,6 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
         } catch(Exception e) {
           callback.invoke(e.getMessage());
         }
-
-        new Handler().postDelayed(new Runnable() {
-          @Override
-          public void run() {
-            AudioManager audioManager=(AudioManager)VoiceModule.this.reactContext.getSystemService(Context.AUDIO_SERVICE);
-            audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
-          }
-        }, 800 );
       }
     });
   }
@@ -320,14 +303,6 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
     sendEvent("onSpeechEnd", event);
     Log.d("ASR", "onEndOfSpeech()");
     isRecognizing = false;
-
-    new Handler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        AudioManager audioManager=(AudioManager)VoiceModule.this.reactContext.getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
-      }
-    }, 800 );
   }
 
   @Override
@@ -340,13 +315,6 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
     sendEvent("onSpeechError", event);
     Log.d("ASR", "onError() - " + errorMessage);
 
-    new Handler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        AudioManager audioManager=(AudioManager)VoiceModule.this.reactContext.getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
-      }
-    }, 800 );
   }
 
   @Override
